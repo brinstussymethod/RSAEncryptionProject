@@ -69,9 +69,8 @@ public class RSAEncrypt {
         for (int i = 0; i < block.length(); i++) {
             encoded.append(charToCode(block.charAt(i)));
         }
-        // Pad with "00" if block < 3 chars
         while (encoded.length() < 6) {
-            encoded.append("00");
+            encoded.append("00"); // pad with "a"
         }
         return encoded.toString();
     }
@@ -79,11 +78,12 @@ public class RSAEncrypt {
     // map character to numeric code
     private static String charToCode(char ch) {
         if (ch == ' ') return "26";
-        if (ch >= 'a' && ch <= 'z') {
-            int code = ch - 'a';
-            return String.format("%02d", code);
-        }
-        // For simplicity, treat unknown chars as "00" (a)
-        return "00";
+        if (ch >= 'a' && ch <= 'z') return String.format("%02d", ch - 'a');
+        if (ch >= 'A' && ch <= 'Z') return String.format("%02d", ch - 'A'); // uppercase → same as lowercase
+        if (ch == ',') return "27";
+        if (ch == '.') return "28";
+        if (ch == '\n') return "29"; // newline support
+        return "00"; // fallback
+    
     }
 }

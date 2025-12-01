@@ -54,7 +54,7 @@ public class RSADecrypt {
     // decode integer block back to text
     private static String decodeBlock(BigInteger m) {
         // Each block is 3 characters → 6 digits (2 digits per char)
-        String block = String.format("%06d", m.intValue()); // pad with leading zeros
+        String block = String.format("%06d", Integer.parseInt(m.toString())); // use full string, not intValue
         StringBuilder decoded = new StringBuilder();
         for (int i = 0; i < block.length(); i += 2) {
             int code = Integer.parseInt(block.substring(i, i + 2));
@@ -65,6 +65,11 @@ public class RSADecrypt {
 
     // map numeric code back to character
     private static char codeToChar(int code) {
-        return (code == 26) ? ' ' : (char) ('a' + code);
+        if (code == 26) return ' ';
+        if (code >= 0 && code <= 25) return (char) ('a' + code);
+        if (code == 27) return ',';
+        if (code == 28) return '.';
+        if (code == 29) return '\n';
+        return 'a'; // fallback
     }
 }
