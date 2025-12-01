@@ -53,8 +53,11 @@ public class RSADecrypt {
 
     // decode integer block back to text
     private static String decodeBlock(BigInteger m) {
-        // Each block is 3 characters → 6 digits (2 digits per char)
-        String block = String.format("%06d", Integer.parseInt(m.toString())); // use full string, not intValue
+        String block = m.toString(); // full precision, no truncation
+        // Pad to 6 digits if needed
+        while (block.length() < 6) {
+            block = "0" + block;
+        }
         StringBuilder decoded = new StringBuilder();
         for (int i = 0; i < block.length(); i += 2) {
             int code = Integer.parseInt(block.substring(i, i + 2));
